@@ -14,6 +14,7 @@ import { ru } from 'date-fns/locale';
 const Index = () => {
   const { toast } = useToast();
   const [date, setDate] = useState<Date>();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -23,6 +24,7 @@ const Index = () => {
   });
 
   const scrollToSection = (id: string) => {
+    setMobileMenuOpen(false);
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -155,11 +157,30 @@ const Index = () => {
                 Записаться
               </Button>
             </div>
-            <Button onClick={() => scrollToSection('booking')} size="sm" className="md:hidden">
-              Записаться
+            <Button 
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
+              size="sm" 
+              variant="ghost"
+              className="md:hidden"
+            >
+              <Icon name={mobileMenuOpen ? "X" : "Menu"} size={24} />
             </Button>
           </div>
         </nav>
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-white border-t border-border animate-fade-in">
+            <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
+              <button onClick={() => scrollToSection('services')} className="text-left py-2 hover:text-primary transition-colors">Услуги</button>
+              <button onClick={() => scrollToSection('portfolio')} className="text-left py-2 hover:text-primary transition-colors">Портфолио</button>
+              <button onClick={() => scrollToSection('reviews')} className="text-left py-2 hover:text-primary transition-colors">Отзывы</button>
+              <button onClick={() => scrollToSection('faq')} className="text-left py-2 hover:text-primary transition-colors">FAQ</button>
+              <button onClick={() => scrollToSection('about')} className="text-left py-2 hover:text-primary transition-colors">О нас</button>
+              <Button onClick={() => scrollToSection('booking')} className="w-full">
+                Записаться
+              </Button>
+            </div>
+          </div>
+        )}
       </header>
 
       <section className="pt-32 pb-20 px-4 bg-gradient-to-br from-background via-muted/30 to-background">
