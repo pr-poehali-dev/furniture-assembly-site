@@ -1,41 +1,18 @@
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { useToast } from '@/hooks/use-toast';
 import Icon from '@/components/ui/icon';
-import { format } from 'date-fns';
-import { ru } from 'date-fns/locale';
+import Header from '@/components/Header';
+import HeroSection from '@/components/HeroSection';
+import BookingForm from '@/components/BookingForm';
+import Footer from '@/components/Footer';
 
 const Index = () => {
-  const { toast } = useToast();
-  const [date, setDate] = useState<Date>();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    time: '',
-    message: ''
-  });
 
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast({
-      title: "Заявка отправлена!",
-      description: "Мы свяжемся с вами в ближайшее время.",
-    });
-    setFormData({ name: '', phone: '', email: '', time: '', message: '' });
-    setDate(undefined);
   };
 
   const services = [
@@ -136,98 +113,15 @@ const Index = () => {
     }
   ];
 
-  const timeSlots = ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00'];
-
   return (
     <div className="min-h-screen">
-      <header className="fixed top-0 w-full bg-white/95 backdrop-blur-sm z-50 border-b border-border shadow-sm">
-        <nav className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-2xl font-bold text-primary">
-              <Icon name="Wrench" size={28} />
-              <span>МебельМастер</span>
-            </div>
-            <div className="hidden md:flex items-center gap-8">
-              <button onClick={() => scrollToSection('services')} className="hover:text-primary transition-colors">Услуги</button>
-              <button onClick={() => scrollToSection('portfolio')} className="hover:text-primary transition-colors">Портфолио</button>
-              <button onClick={() => scrollToSection('reviews')} className="hover:text-primary transition-colors">Отзывы</button>
-              <button onClick={() => scrollToSection('faq')} className="hover:text-primary transition-colors">FAQ</button>
-              <button onClick={() => scrollToSection('about')} className="hover:text-primary transition-colors">О нас</button>
-              <Button onClick={() => scrollToSection('booking')} size="sm">
-                Записаться
-              </Button>
-            </div>
-            <Button 
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
-              size="sm" 
-              variant="ghost"
-              className="md:hidden"
-            >
-              <Icon name={mobileMenuOpen ? "X" : "Menu"} size={24} />
-            </Button>
-          </div>
-        </nav>
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-white border-t border-border animate-fade-in">
-            <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
-              <button onClick={() => scrollToSection('services')} className="text-left py-2 hover:text-primary transition-colors">Услуги</button>
-              <button onClick={() => scrollToSection('portfolio')} className="text-left py-2 hover:text-primary transition-colors">Портфолио</button>
-              <button onClick={() => scrollToSection('reviews')} className="text-left py-2 hover:text-primary transition-colors">Отзывы</button>
-              <button onClick={() => scrollToSection('faq')} className="text-left py-2 hover:text-primary transition-colors">FAQ</button>
-              <button onClick={() => scrollToSection('about')} className="text-left py-2 hover:text-primary transition-colors">О нас</button>
-              <Button onClick={() => scrollToSection('booking')} className="w-full">
-                Записаться
-              </Button>
-            </div>
-          </div>
-        )}
-      </header>
+      <Header 
+        mobileMenuOpen={mobileMenuOpen}
+        setMobileMenuOpen={setMobileMenuOpen}
+        scrollToSection={scrollToSection}
+      />
 
-      <section className="pt-32 pb-20 px-4 bg-gradient-to-br from-background via-muted/30 to-background">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6 animate-fade-in">
-              <h1 className="text-5xl md:text-6xl font-bold leading-tight">
-                Профессиональная сборка мебели
-              </h1>
-              <p className="text-xl text-muted-foreground">
-                Быстро, качественно, с гарантией. Более 500 довольных клиентов в Москве и области.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <Button size="lg" onClick={() => scrollToSection('booking')} className="gap-2">
-                  <Icon name="Calendar" size={20} />
-                  Записаться онлайн
-                </Button>
-                <Button size="lg" variant="outline" onClick={() => scrollToSection('services')} className="gap-2">
-                  <Icon name="List" size={20} />
-                  Наши услуги
-                </Button>
-              </div>
-              <div className="flex gap-8 pt-4">
-                <div>
-                  <div className="text-3xl font-bold text-primary">500+</div>
-                  <div className="text-sm text-muted-foreground">Проектов</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-primary">5 лет</div>
-                  <div className="text-sm text-muted-foreground">На рынке</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-primary">24/7</div>
-                  <div className="text-sm text-muted-foreground">Поддержка</div>
-                </div>
-              </div>
-            </div>
-            <div className="relative animate-fade-in" style={{ animationDelay: '0.2s' }}>
-              <img 
-                src="https://cdn.poehali.dev/projects/cf2c9b0f-33ca-41a2-8c83-f774e376ad90/files/8edd6eb2-848e-49ea-9796-d68cc8a94e20.jpg" 
-                alt="Инструменты для сборки мебели"
-                className="rounded-2xl shadow-2xl"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroSection scrollToSection={scrollToSection} />
 
       <section id="services" className="py-20 px-4 bg-white">
         <div className="container mx-auto max-w-6xl">
@@ -364,98 +258,7 @@ const Index = () => {
         </div>
       </section>
 
-      <section id="booking" className="py-20 px-4 bg-gradient-to-br from-primary/5 via-muted/30 to-primary/5">
-        <div className="container mx-auto max-w-2xl">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">Онлайн-запись</h2>
-            <p className="text-lg text-muted-foreground">
-              Выберите удобное время для сборки мебели
-            </p>
-          </div>
-          <Card className="border-2 shadow-xl">
-            <CardContent className="pt-6">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Ваше имя *</label>
-                  <Input 
-                    required
-                    placeholder="Иван Иванов"
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Телефон *</label>
-                  <Input 
-                    required
-                    type="tel"
-                    placeholder="+7 (999) 123-45-67"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Email</label>
-                  <Input 
-                    type="email"
-                    placeholder="ivan@example.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  />
-                </div>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Дата *</label>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button variant="outline" className="w-full justify-start text-left font-normal">
-                          <Icon name="Calendar" size={16} className="mr-2" />
-                          {date ? format(date, 'dd MMMM yyyy', { locale: ru }) : 'Выберите дату'}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={date}
-                          onSelect={setDate}
-                          locale={ru}
-                          disabled={(date) => date < new Date()}
-                        />
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Время *</label>
-                    <select 
-                      required
-                      className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm"
-                      value={formData.time}
-                      onChange={(e) => setFormData({...formData, time: e.target.value})}
-                    >
-                      <option value="">Выберите время</option>
-                      {timeSlots.map(slot => (
-                        <option key={slot} value={slot}>{slot}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Описание работы</label>
-                  <Textarea 
-                    placeholder="Опишите, какую мебель нужно собрать..."
-                    rows={4}
-                    value={formData.message}
-                    onChange={(e) => setFormData({...formData, message: e.target.value})}
-                  />
-                </div>
-                <Button type="submit" className="w-full" size="lg">
-                  Отправить заявку
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+      <BookingForm />
 
       <section id="contacts" className="py-20 px-4 bg-white">
         <div className="container mx-auto max-w-4xl">
@@ -494,17 +297,7 @@ const Index = () => {
         </div>
       </section>
 
-      <footer className="py-8 px-4 bg-secondary text-secondary-foreground">
-        <div className="container mx-auto max-w-6xl text-center">
-          <div className="flex items-center justify-center gap-2 mb-4 text-xl font-bold">
-            <Icon name="Wrench" size={24} />
-            <span>МебельМастер</span>
-          </div>
-          <p className="text-sm opacity-80">
-            © 2024 МебельМастер. Все права защищены.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
